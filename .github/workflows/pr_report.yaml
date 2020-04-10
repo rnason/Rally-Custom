@@ -1,0 +1,37 @@
+name: 'Open PR Reporting'
+on:
+  # schedule:
+    # * is a special character in YAML so you have to quote this string
+  #  - cron:  '0 */12 * * *'
+  push:
+    branches:
+      - master
+
+jobs:
+  pull_request_report:
+    runs-on: ubuntu-latest
+    name: "Search Open Pull Requests"
+    # description: "A Github Actions job that runs an open PR report and can notify reviewers via mentioned comments on tickets open past a set threshold"
+    steps:
+      # To use this repository's private action, you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Open Pull Request Report
+        uses: ./
+        id: open-prs
+        with:
+          repo_token: ${{ secrets.PR_SEARCH }}
+          repo_namespace: tapestryinc
+          is_organization: true
+          open_days_threshold: 5
+          send_notifications: false
+          verbose_mode: false
+      - name: Commit Report
+        run: |
+          git config --local user.name "GitHub OpenPR Action"
+          git config --local user.email "action@github.com"
+          git add reports/*; git commit -m "Open PR Report Generated"
+      - name: Push Change
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}

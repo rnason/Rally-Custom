@@ -1,0 +1,80 @@
+<html>
+  <head>
+    <style>
+      #pull_requests {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      #pull_requests td, #pull_requests th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+
+      #pull_requests tr:nth-child(even){background-color: #f2f2f2;}
+
+      #pull_requests tr:hover {background-color: rgb(242, 243, 246);}
+
+      #pull_requests th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: rgb(252, 219, 65);
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <br/>
+    <center>
+      <h1>Github {{RepoNamespace|title}} Open Pull Request Report</h1>
+    </center>
+    <hr/>
+    <center>
+      <p>
+        This page was automatically generated:  It contains all of the open pull requests in the Github {{RepoNamespace}} account.
+      </p>
+    </center>
+    <br/><br/>
+    <p>
+      If a pull requests Reviewers column is marked in <span style="background-color: rgb(67, 233, 86); color:black">&nbsp;&nbsp; Green &nbsp;&nbsp;</span> &nbsp;a review on the pull request has been submitted.
+    </p>
+    <p>
+      <b>Any pull requests marked in <span style="background-color: rgb(249, 63, 63); color:black">&nbsp;&nbsp; Red &nbsp;&nbsp;</span> &nbsp;are older then 5 days and should be reviewed/merged/closed as soon as possible.</b>
+    </p>
+    <br/><br/>
+    <table id="pull_requests">
+      <tr>
+        <th>Repository</th>
+        <th>Title</th>
+        <th>Submitter</th>
+        <th>Reviewers</th>
+        <th>Date Created</th>
+        <th>PR Age (Days)</th>
+      </tr>
+      {% for pr in OpenPullRequests %}
+      <tr>
+        <td style="color: rgb(28, 79, 247);"><a href="{{ pr.link|default(" ", true) }}">{{ pr.repository_url|default(" ", true) }}</a></td>
+        <td>{{ pr.title|default(" ", true) }}</td>
+        <td>{{ pr.submitter|default(" ", true) }}</td>
+        {% if pr.review_count > 0 %}
+        <td style="background-color: rgb(67, 233, 86);">{{ pr.reviewers|join(', <br/> ') }}</td>
+        {% else %}
+        <td>{{ pr.reviewers|join(', <br/> ') }}</td>
+        {% endif %}
+        <td>{{ pr.created|default(" ", true) }}</td>
+        {% if pr.age_days > pr.days_open_threshold %}
+        <td style="background-color: rgb(249, 63, 63); text-align: center;">{{ pr.age_days|default(0, true) }}</td>
+        {% else %}
+        <td style="text-align: center;">{{ pr.age_days|default(0, true) }}</td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+    <p><b>Total Open PRs: {{OpenPullRequests|length}}</b></p>
+    <center>
+      <sub>This page was generated on {{Now}}</sub>
+    </center>
+  </body>
+</html>

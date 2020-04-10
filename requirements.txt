@@ -1,0 +1,10 @@
+PyGithub
+progress
+cloudmage-jinjautils
+atlassian-python-api
+
+# Atlassian Python
+# https://pypi.org/project/atlassian-python-api/
+# https://atlassian-python-api.readthedocs.io/confluence.html#page-actions
+# https://github.com/atlassian-api/atlassian-python-api/blob/master/examples/confluence/confluence-page-update.py
+

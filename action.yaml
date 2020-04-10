@@ -1,0 +1,39 @@
+# action.yml
+name: 'Open PR Report'
+description: 'Search for all open pull requests, notify late reviewers, and publish html report.'
+inputs:
+  repo_token:
+    description: 'Github Access Token'
+    required: true
+  repo_namespace:
+    description: 'The Github account user/organization repository identifier'
+    required: true
+  is_organization:
+    description: 'Specify if the account that the report is being run against an organization. A value of false will indicate a user repository'
+    required: false
+    default: true
+  open_days_threshold:
+    description: 'Specify the number of days a PR can be open before the report starts to notify users via automatic comments to the PR with mentions to selected reviewers.'
+    required: false
+    default: 5
+  send_notifications:
+    description: 'Specify if a mention comment should be pushed to open pull requests that exceed the open_days_threshold.'
+    required: false
+    default: false
+  verbose_mode:
+    description: 'Specify if verbose mode should be enabled during execution.'
+    required: false
+    default: false
+# outputs:
+#   report:
+#     description: 'Pull Request Report HTML Template'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.repo_token }}
+    - ${{ inputs.repo_namespace }}
+    - ${{ inputs.is_organization }}
+    - ${{ inputs.open_days_threshold }}
+    - ${{ inputs.send_notifications }}
+    - ${{ inputs.verbose_mode }}
