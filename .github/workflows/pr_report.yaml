@@ -22,7 +22,7 @@ jobs:
         with:
           repo_token: ${{ secrets.PR_SEARCH }}
           repo_namespace: tapestryinc
-          is_organization: true
+          is_organization: false
           open_days_threshold: 5
           send_notifications: false
           verbose_mode: false
